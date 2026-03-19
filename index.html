@@ -1,817 +1,558 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IT-Lernquiz</title>
-  <style>
-    :root{
-      --bg:#0f172a;
-      --card:#111827;
-      --card2:#1f2937;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#38bdf8;
-      --accent2:#22c55e;
-      --border:#334155;
-      --shadow: 0 10px 25px rgba(0,0,0,.25);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
-      color:var(--text);
-    }
-    .app{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-    h1{
-      margin: 0 0 8px;
-      font-size: clamp(1.7rem, 3vw, 2.6rem);
-    }
-    p.lead{
-      margin: 0 0 18px;
-      color: var(--muted);
-    }
-    .toolbar{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      margin: 18px 0 10px;
-    }
-    input[type="search"]{
-      flex: 1 1 280px;
-      min-width: 240px;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #0b1220;
-      color: var(--text);
-      outline: none;
-    }
-    input[type="search"]::placeholder{color:#6b7280}
-    button{
-      border: 1px solid var(--border);
-      background: var(--card2);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 12px;
-      cursor:pointer;
-      transition: .15s ease;
-    }
-    button:hover{transform: translateY(-1px); border-color: var(--accent)}
-    .stats{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin: 10px 0 18px;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-    .quiz{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-    }
-    details.card{
-      background: linear-gradient(180deg, rgba(17,24,39,.95), rgba(15,23,42,.95));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow:hidden;
-      box-shadow: var(--shadow);
-    }
-    details.card[open]{
-      border-color: rgba(56,189,248,.6);
-    }
-    summary{
-      list-style:none;
-      cursor:pointer;
-      padding: 16px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      font-weight:600;
-      line-height:1.35;
-    }
-    summary::-webkit-details-marker{display:none}
-    .q{
-      flex:1;
-      min-width:0;
-    }
-    .tag{
-      flex:0 0 auto;
-      font-size:.75rem;
-      color:#dbeafe;
-      background: rgba(56,189,248,.14);
-      border:1px solid rgba(56,189,248,.25);
-      padding: 5px 8px;
-      border-radius: 999px;
-      white-space:nowrap;
-    }
-    .answer{
-      padding: 0 16px 16px;
-      color: #d1d5db;
-      white-space: pre-line;
-      line-height: 1.55;
-    }
-    .hint{
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-    .footer-note{
-      margin-top:18px;
-      color: var(--muted);
-      font-size:.9rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT & BWL Komplett-Quiz</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e2937;
+        }
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #312e81);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        h1 { font-size: 2rem; margin-bottom: 8px; }
+        .subtitle { opacity: 0.85; font-size: 1.05rem; }
+        .total-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .quiz-nav {
+            padding: 15px 25px;
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        select {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .stats { display: flex; gap: 20px; font-weight: bold; }
+
+        .question-container {
+            padding: 30px;
+            min-height: 420px;
+        }
+
+        .question-number {
+            background: #e0f2fe;
+            color: var(--dark);
+            padding: 5px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .category-tag {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 22px;
+            color: var(--dark);
+        }
+
+        .answers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer-option {
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .answer-option:hover {
+            background: #f1f5f9;
+            border-color: var(--primary);
+        }
+
+        .answer-option.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .answer-option.correct {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .answer-option.incorrect {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .answer-letter {
+            width: 34px; height: 34px;
+            background: #e2e8f0;
+            color: #334155;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 0.95rem;
+        }
+
+        .feedback {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .feedback.correct { background:#ecfdf5; color:#166534; border-left:5px solid var(--success); }
+        .feedback.incorrect { background:#fef2f2; color:#991b1b; border-left:5px solid var(--danger); }
+
+        .navigation-buttons {
+            padding: 18px 30px;
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 11px 26px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .prev-btn { background:#e2e8f0; }
+        .prev-btn:hover { background:#cbd5e1; }
+        .next-btn { background:var(--primary); color:white; }
+        .next-btn:hover { background:#2563eb; }
+        .submit-btn { background:#16a34a; color:white; }
+        .submit-btn:hover { background:#15803d; }
+
+        .results-screen {
+            padding: 50px 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 180px; height: 180px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .result-label { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
+
+        .result-message { font-size: 1.4rem; margin: 15px 0; color: var(--dark); }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-nav { flex-direction: column; align-items: stretch; }
+            .stats { justify-content: center; }
+            .navigation-buttons { flex-direction: column; gap: 10px; }
+            button { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <h1>IT-Lernquiz</h1>
-    <p class="lead">Klicke auf eine Frage, um die Antwort zu öffnen. Du kannst suchen, mischen und alle Karten aufklappen.</p>
+    <div class="container">
+        <header>
+            <h1>IT & BWL Komplett-Quiz</h1>
+            <p class="subtitle">Alle Fragen — Hardware, Netzwerk, Cloud, Recht, BWL, Projekt, Arbeitsschutz</p>
+            <span class="total-badge" id="totalBadge">110 Fragen</span>
+        </header>
 
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="Fragen durchsuchen ..." />
-      <button id="shuffleBtn">Zufällig mischen</button>
-      <button id="openAllBtn">Alle öffnen</button>
-      <button id="closeAllBtn">Alle schließen</button>
+        <div class="quiz-nav">
+            <select id="categoryFilter">
+                <option value="all">Alle Kategorien</option>
+                <option value="hardware">Hardware</option>
+                <option value="netzwerk">Netzwerk & Cloud</option>
+                <option value="recht">Recht & Wirtschaft</option>
+                <option value="projekt">Projektmanagement</option>
+                <option value="industrie">Industrie 4.0</option>
+                <option value="arbeitsschutz">Arbeitsschutz</option>
+                <option value="berechnung">Berechnungen</option>
+                <option value="bwl">BWL & Handel</option>
+            </select>
+            <div class="stats">
+                <span>Frage <strong id="current">1</strong>/<strong id="total">110</strong></span>
+                <span>✅ <strong id="score">0</strong></span>
+            </div>
+        </div>
+
+        <div id="questionContainer" class="question-container"></div>
+
+        <div class="navigation-buttons">
+            <button class="prev-btn" id="prevBtn" onclick="prevQuestion()">← Zurück</button>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Weiter →</button>
+        </div>
+
+        <div id="resultsContainer" class="results-screen"></div>
     </div>
 
-    <div class="stats">
-      <span id="count">0 Fragen</span>
-    </div>
+    <script>
+        const quizData = [
+            /* ======================== HARDWARE ======================== */
+            { id:1, category:"hardware", question:"Nennen Sie 3 Pioniere der Computertechnik.", options:[{text:"Konrad Zuse, Alan Turing, John von Neumann",correct:true},{text:"Bill Gates, Steve Jobs, Mark Zuckerberg",correct:false},{text:"Tim Berners-Lee, Vint Cerf, Linus Torvalds",correct:false},{text:"Albert Einstein, Nikola Tesla, Thomas Edison",correct:false}], explanation:"Konrad Zuse (erster Computer), Alan Turing (theoretische Grundlagen), John von Neumann (Architektur)."},
+            { id:2, category:"hardware", question:"Was beschreibt die Von-Neumann-Architektur?", options:[{text:"Daten und Programme liegen im selben Speicher",correct:true},{text:"Separate Speicher für Daten und Programme",correct:false},{text:"Ein Netzwerkprotokoll",correct:false},{text:"Eine Grafikkartenarchitektur",correct:false}], explanation:"Programme und Daten befinden sich im gleichen Speicher — das Grundprinzip moderner Computer."},
+            { id:3, category:"hardware", question:"Welches ist das wichtigste Basismaterial für die Chipherstellung?", options:[{text:"Silizium",correct:true},{text:"Kupfer",correct:false},{text:"Gold",correct:false},{text:"Aluminium",correct:false}], explanation:"Silizium ist das wichtigste Halbleitermaterial für die Chipfertigung."},
+            { id:4, category:"hardware", question:"Welche sind die drei Hauptbestandteile der CPU?", options:[{text:"Rechenwerk (ALU), Steuerwerk, Register",correct:true},{text:"RAM, ROM, Cache",correct:false},{text:"BIOS, UEFI, TPM",correct:false},{text:"GPU, NPU, APU",correct:false}], explanation:"ALU, Steuerwerk und Register sind die Kernkomponenten der CPU."},
+            { id:5, category:"hardware", question:"Was bedeutet OEM?", options:[{text:"Original Equipment Manufacturer",correct:true},{text:"Open Enterprise Management",correct:false},{text:"Optical Electronic Module",correct:false},{text:"Online Equipment Monitor",correct:false}], explanation:"OEM = Hersteller von Originalausstattung für andere Marken."},
+            { id:6, category:"hardware", question:"Welche drei Formfaktoren von Motherboards gibt es?", options:[{text:"ATX, Micro-ATX, Mini-ITX",correct:true},{text:"Full-ATX, Half-ATX, Quarter-ATX",correct:false},{text:"Type A, Type B, Type C",correct:false},{text:"Standard, Gaming, Workstation",correct:false}], explanation:"ATX (Standard), Micro-ATX (kompakt), Mini-ITX (sehr klein)."},
+            { id:7, category:"hardware", question:"Was ist ein Thin-Client?", options:[{text:"Ein Rechner mit sehr geringer lokaler Rechenleistung, der Dienste vom Server bezieht",correct:true},{text:"Ein besonders dünner Laptop",correct:false},{text:"Ein Mobilgerät mit wenig Speicher",correct:false},{text:"Ein Einplatinencomputer",correct:false}], explanation:"Thin-Clients sind schlanke Endgeräte, die Anwendungen vom Server beziehen."},
+            { id:8, category:"hardware", question:"Was bedeutet RAM?", options:[{text:"Random Access Memory — der Arbeitsspeicher",correct:true},{text:"Read Access Memory — Nur-Lese-Speicher",correct:false},{text:"Rapid Access Module",correct:false},{text:"Redundant Array of Memory",correct:false}], explanation:"RAM ist der flüchtige Arbeitsspeicher."},
+            { id:9, category:"hardware", question:"Welches Cache-Level ist das schnellste?", options:[{text:"L1-Cache",correct:true},{text:"L2-Cache",correct:false},{text:"L3-Cache",correct:false},{text:"L4-Cache",correct:false}], explanation:"L1-Cache sitzt direkt im CPU-Kern und ist am schnellsten."},
+            { id:10, category:"hardware", question:"Was macht das BIOS bzw. UEFI?", options:[{text:"Initialisiert die Hardware und startet das Betriebssystem",correct:true},{text:"Ist ein Antivirenprogramm",correct:false},{text:"Verwaltet nur die Grafikkarte",correct:false},{text:"Regelt die Kühlung des Prozessors",correct:false}], explanation:"BIOS/UEFI ist die erste Software, die beim Einschalten ausgeführt wird."},
+            { id:11, category:"hardware", question:"Was bedeutet TLC bei Flash-Speichern?", options:[{text:"Triple-Level-Cell — 3 Bit pro Speicherzelle",correct:true},{text:"Total Logical Cache",correct:false},{text:"Temporary Load Control",correct:false},{text:"Triple Layer Chip",correct:false}], explanation:"TLC speichert 3 Bit pro Zelle — weniger haltbar, aber günstiger als SLC/MLC."},
+            { id:12, category:"hardware", question:"Was verstehen Sie unter dem Begriff Chipsatz?", options:[{text:"Steuerlogik, die die Kommunikation zwischen CPU, RAM und Peripherie regelt",correct:true},{text:"Der Prozessor selbst",correct:false},{text:"Der Arbeitsspeicher",correct:false},{text:"Die Hauptplatine",correct:false}], explanation:"Der Chipsatz verbindet und koordiniert die Hauptkomponenten."},
+            { id:13, category:"hardware", question:"Was verstehen Sie unter JEDEC?", options:[{text:"Ein Normungsgremium für Halbleiter- und Speicherstandards",correct:true},{text:"Eine Programmiersprache",correct:false},{text:"Ein Netzwerkprotokoll",correct:false},{text:"Ein Chip-Hersteller",correct:false}], explanation:"JEDEC entwickelt Standards für Halbleiterbauelemente und Speicher."},
+            { id:14, category:"hardware", question:"Was verstehen Sie unter NAS?", options:[{text:"Network Attached Storage — netzwerkgebundener Speicher",correct:true},{text:"Ein Netzwerkprotokoll",correct:false},{text:"Ein Betriebssystem",correct:false},{text:"Eine Datenbankart",correct:false}], explanation:"NAS ist ein spezieller Dateiserver im Netzwerk."},
+            { id:15, category:"hardware", question:"Was ist ein Embedded-System?", options:[{text:"Ein in ein Gerät eingebettetes Computersystem für eine spezielle Aufgabe",correct:true},{text:"Ein besonders leistungsstarker Server",correct:false},{text:"Ein universeller Heimcomputer",correct:false},{text:"Ein Betriebssystem für Smartphones",correct:false}], explanation:"Eingebettete Systeme erfüllen eine fest definierte Funktion."},
+            { id:16, category:"hardware", question:"Was bedeutet Pipelining?", options:[{text:"Überlappende Verarbeitung mehrerer Befehlsphasen in der CPU",correct:true},{text:"Das Kühlen der CPU mit Wasser",correct:false},{text:"Eine Methode zur Datenverschlüsselung",correct:false},{text:"Ein Netzwerkprotokoll für Streaming",correct:false}], explanation:"Pipelining erhöht den Durchsatz, indem Befehlsphasen parallel arbeiten."},
+            { id:17, category:"hardware", question:"Nennen Sie 3 typische Schadsoftwarearten.", options:[{text:"Virus, Wurm, Trojaner",correct:true},{text:"Firewall, Antivirus, Backup",correct:false},{text:"Browser, Mailclient, Editor",correct:false},{text:"Treiber, Plugin, App",correct:false}], explanation:"Virus, Wurm und Trojaner sind klassische Schadsoftwaretypen."},
+            { id:18, category:"hardware", question:"Was ist eine Anti-Spy-Folie?", options:[{text:"Eine Sichtschutzfolie, die seitliches Mitlesen vom Display erschwert",correct:true},{text:"Eine Folie gegen Kratzer",correct:false},{text:"Eine Folie zur Verbesserung der Farbdarstellung",correct:false},{text:"Eine magnetische Abschirmfolie",correct:false}], explanation:"Die Folie verengt den Blickwinkel auf das Display."},
+            { id:19, category:"hardware", question:"Nennen Sie 2 technische Verfahren bei Tintenstrahldruckern.", options:[{text:"Thermisches Verfahren (Bubble-Jet) und Piezo-Verfahren",correct:true},{text:"Laser- und LED-Verfahren",correct:false},{text:"Nadeldruck und Thermodirekt",correct:false},{text:"Sublimation und Solid-Ink",correct:false}], explanation:"Thermisch nutzt Hitze, Piezo nutzt elektrische Spannung an Kristallen."},
+            { id:20, category:"hardware", question:"Nennen Sie 2 Scannerarten und deren bevorzugte Einsatzgebiete.", options:[{text:"Flachbettscanner (Fotos, Bücher) und Einzugsscanner (lose Blätter, Archivierung)",correct:true},{text:"3D-Scanner (Architektur) und Handscanner (Lager)",correct:false},{text:"Laserscanner (Sicherheit) und Strichcodescanner (Kasse)",correct:false},{text:"Diascanner (Filme) und Scheckscanner (Banken)",correct:false}], explanation:"Flachbett für gebundene Vorlagen, Einzug für Massendigitalisierung."},
+            { id:21, category:"hardware", question:"Welche Displayarten kennen Sie?", options:[{text:"TN, VA, IPS, OLED",correct:true},{text:"LCD, LED, Neon, Plasma",correct:false},{text:"CRT, TFT, LCD, DLP",correct:false},{text:"HD, Full HD, 4K, 8K",correct:false}], explanation:"TN, VA und IPS sind LCD-Varianten, OLED ist eine eigene Technologie."},
+            { id:22, category:"hardware", question:"Welche Nachteile hat ein VA-Panel?", options:[{text:"Langsamere Reaktionszeit und mögliche Schlieren (Black Smearing)",correct:true},{text:"Hoher Stromverbrauch",correct:false},{text:"Nur schlechte Farbdarstellung",correct:false},{text:"Keine Full-HD-Auflösung möglich",correct:false}], explanation:"VA hat bessere Kontraste als IPS, aber langsamere Reaktionszeit."},
+            { id:23, category:"hardware", question:"Welche Vorteile hat ein IPS-Panel?", options:[{text:"Sehr gute Blickwinkel und naturgetreue Farbdarstellung",correct:true},{text:"Höchster Kontrast aller Panel-Typen",correct:false},{text:"Schnellste Reaktionszeit",correct:false},{text:"Günstigster Panel-Typ",correct:false}], explanation:"IPS ist ideal für Farb- und Bildbearbeitung."},
+            { id:24, category:"hardware", question:"Welche maximale Auflösung bietet HDMI 2.0?", options:[{text:"4K / UHD mit 60 Hz (3840 × 2160)",correct:true},{text:"8K mit 60 Hz",correct:false},{text:"2560 × 1440 mit 144 Hz",correct:false},{text:"Full HD mit 240 Hz",correct:false}], explanation:"HDMI 2.0 unterstützt bis zu 4K60."},
+            { id:25, category:"hardware", question:"Was verstehen Sie unter Refurbishing?", options:[{text:"Professionelle Wiederaufbereitung gebrauchter IT-Geräte",correct:true},{text:"Recycling von Elektroschrott",correct:false},{text:"Neuentwicklung von Hardware",correct:false},{text:"Verschrottung alter Geräte",correct:false}], explanation:"Refurbishing umfasst Reinigung, Prüfung, Austausch und Wieder Verkauf."},
+            { id:26, category:"hardware", question:"Was verstehen Sie unter IT-Rollback?", options:[{text:"Rückkehr auf einen vorherigen System- oder Versionsstand",correct:true},{text:"Die Aktualisierung der Firmware",correct:false},{text:"Das Löschen aller Daten",correct:false},{text:"Die Neuinstallation des Betriebssystems",correct:false}], explanation:"Rollback wird bei fehlgeschlagenen Updates oder Änderungen eingesetzt."},
 
-    <div id="quiz" class="quiz"></div>
+            /* ======================== NETZWERK & CLOUD ======================== */
+            { id:27, category:"netzwerk", question:"Was bedeutet ERP?", options:[{text:"Enterprise Resource Planning — Planung aller Unternehmensressourcen",correct:true},{text:"Electronic Data Processing",correct:false},{text:"Extended Routing Protocol",correct:false},{text:"Efficient Resource Processing",correct:false}], explanation:"ERP-Systeme integrieren alle zentralen Geschäftsprozesse."},
+            { id:28, category:"netzwerk", question:"Was bedeutet Low-Code-Programmierung?", options:[{text:"Entwicklung mit visuellen Tools und sehr wenig manuellem Code",correct:true},{text:"Programmieren mit geringem Speicherverbrauch",correct:false},{text:"Code für Low-End-Hardware",correct:false},{text:"Eine low-cost Programmiersprache",correct:false}], explanation:"Low-Code nutzt Drag-and-Drop und vorgefertigte Bausteine."},
+            { id:29, category:"netzwerk", question:"Was bedeutet Abwärtskompatibilität?", options:[{text:"Neue Systeme können ältere Daten, Formate oder Hardware weiter nutzen",correct:true},{text:"Alte Hardware kann neue Software ausführen",correct:false},{text:"Software läuft auf verschiedenen Betriebssystemen",correct:false},{text:"Daten werden in kleinerer Form gespeichert",correct:false}], explanation:"Abwärtskompatibilität sichert die Nutzung älterer Ressourcen."},
+            { id:30, category:"netzwerk", question:"Was bedeutet On-Premises?", options:[{text:"IT-Infrastruktur wird im eigenen Rechenzentrum betrieben",correct:true},{text:"Nutzung von Cloud-Diensten",correct:false},{text:"Mobile Arbeitsplätze",correct:false},{text:"Virtuelle Desktops",correct:false}], explanation:"On-Premises = Betrieb „vor Ort\" im eigenen Haus."},
+            { id:31, category:"netzwerk", question:"Was bedeutet MAN?", options:[{text:"Metropolitan Area Network — stadtweites Netz",correct:true},{text:"Main Area Network",correct:false},{text:"Multiple Access Network",correct:false},{text:"Managed Area Network",correct:false}], explanation:"MAN verbindet Netzwerke in einer Stadt oder Region."},
+            { id:32, category:"netzwerk", question:"Was bedeutet SaaS?", options:[{text:"Software as a Service — Software wird über das Internet bereitgestellt",correct:true},{text:"System as a Service",correct:false},{text:"Storage as a Service",correct:false},{text:"Security as a Service",correct:false}], explanation:"SaaS = Software wird als gehosteter Dienst genutzt."},
+            { id:33, category:"netzwerk", question:"Was bedeutet PaaS?", options:[{text:"Platform as a Service — Entwicklungsumgebung aus der Cloud",correct:true},{text:"Processing as a Service",correct:false},{text:"Power as a Service",correct:false},{text:"Private as a Service",correct:false}], explanation:"PaaS bietet eine Plattform für Entwicklung, Test und Betrieb."},
+            { id:34, category:"netzwerk", question:"Was bedeutet DaaS?", options:[{text:"Desktop as a Service — virtuelle Desktops aus der Cloud",correct:true},{text:"Data as a Service",correct:false},{text:"Development as a Service",correct:false},{text:"Disaster as a Service",correct:false}], explanation:"DaaS liefert komplette Desktop-Umgebungen aus der Cloud."},
+            { id:35, category:"netzwerk", question:"Was bedeutet VDI?", options:[{text:"Virtual Desktop Infrastructure",correct:true},{text:"Virtual Data Interface",correct:false},{text:"Very Dynamic Integration",correct:false},{text:"Video Display Input",correct:false}], explanation:"VDI ist die Bereitstellung virtueller Desktop-Instanzen."},
+            { id:36, category:"netzwerk", question:"Was ist ein Cloud-Client?", options:[{text:"Endgerät oder Programm, das Cloud-Dienste nutzt",correct:true},{text:"Ein besonders leistungsstarker Server",correct:false},{text:"Eine Programmiersprache für Cloud",correct:false},{text:"Ein Sicherheitszertifikat",correct:false}], explanation:"Cloud-Clients können Browser, Apps oder Thin Clients sein."},
+            { id:37, category:"netzwerk", question:"Was ist eine private Cloud?", options:[{text:"Cloud-Umgebung, die nur einem Unternehmen zur Verfügung steht",correct:true},{text:"Eine Cloud ohne Internetverbindung",correct:false},{text:"Ein privates Netzwerk",correct:false},{text:"Ein kostenloser Cloud-Dienst",correct:false}], explanation:"Private Clouds bieten maximale Kontrolle und Sicherheit."},
+            { id:38, category:"netzwerk", question:"Was ist eine Hybrid Cloud?", options:[{text:"Kombination aus privater und öffentlicher Cloud",correct:true},{text:"Nur private Cloud",correct:false},{text:"Nur öffentliche Cloud",correct:false},{text:"Eine Cloud mit zwei Rechenzentren",correct:false}], explanation:"Hybrid Cloud verbindet die Vorteile beider Modelle."},
+            { id:39, category:"netzwerk", question:"Was bedeutet RFID?", options:[{text:"Radio Frequency Identification — kontaktlose Identifikation per Funk",correct:true},{text:"Remote File Integration and Deployment",correct:false},{text:"Rapid File Data Network",correct:false},{text:"Realtime Frequency Identification",correct:false}], explanation:"RFID wird z. B. bei Zugangssystemen und Warenwirtschaft eingesetzt."},
+            { id:40, category:"netzwerk", question:"Was verstehen Sie unter IT-Outsourcing?", options:[{text:"Auslagerung von IT-Aufgaben an externe Dienstleister",correct:true},{text:"Anschaffung neuer IT-Systeme",correct:false},{text:"Interne IT-Schulung",correct:false},{text:"Abschaffung der IT-Abteilung",correct:false}], explanation:"Outsourcing überträgt IT-Aufgaben an spezialisierte Partner."},
+            { id:41, category:"netzwerk", question:"Was bedeutet On-Site-Management?", options:[{text:"IT-Betreuung und -Management vor Ort beim Kunden",correct:true},{text:"Fernwartung über das Internet",correct:false},{text:"Verwaltung der Cloud-Infrastruktur",correct:false},{text:"Installation von Software vor Ort",correct:false}], explanation:"On-Site = am Standort des Kunden / vor Ort."},
+            { id:42, category:"netzwerk", question:"Was verstehen Sie unter SLAs?", options:[{text:"Service Level Agreements — vertraglich vereinbarte Servicequalität",correct:true},{text:"Software License Agreements",correct:false},{text:"System Level Architecture",correct:false},{text:"Secure Local Area",correct:false}], explanation:"SLAs regeln Verfügbarkeit, Reaktionszeiten und Support."},
+            { id:43, category:"netzwerk", question:"Was verstehen Sie unter DMS?", options:[{text:"Dokumentenmanagementsystem — Verwaltung digitaler Dokumente",correct:true},{text:"Data Management System",correct:false},{text:"Desktop Messaging Service",correct:false},{text:"Dynamic Memory Storage",correct:false}], explanation:"DMS organisiert, archiviert und verwaltet Dokumente."},
+            { id:44, category:"netzwerk", question:"Was verstehen Sie unter SCM?", options:[{text:"Supply Chain Management — Steuerung der Lieferkette",correct:true},{text:"Software Configuration Management",correct:false},{text:"System Control Management",correct:false},{text:"Secure Content Management",correct:false}], explanation:"SCM optimiert alle Prozesse entlang der Lieferkette."},
+            { id:45, category:"netzwerk", question:"Was verstehen Sie unter MES?", options:[{text:"Manufacturing Execution System — Produktionsleitsystem",correct:true},{text:"Management Execution System",correct:false},{text:"Main Enterprise Software",correct:false},{text:"Mobile Enterprise Solution",correct:false}], explanation:"MES steuert und überwacht die Fertigung in Echtzeit."},
+            { id:46, category:"netzwerk", question:"Was sind digitale Ökosysteme?", options:[{text:"Vernetzte Plattformen, Daten und Services, die gemeinsam Wert schaffen",correct:true},{text:"Nur soziale Netzwerke",correct:false},{text:"Geschlossene Unternehmensnetzwerke",correct:false},{text:"Einfache Websites",correct:false}], explanation:"Digitale Ökosysteme verbinden Unternehmen, Kunden und Technologien."},
+            { id:47, category:"netzwerk", question:"Was sind cyber-physische Systeme?", options:[{text:"Systeme, die physische Prozesse mit digitaler Steuerung verbinden",correct:true},{text:"Nur Computer ohne Netzwerkanschluss",correct:false},{text:"Handys und Smartphones",correct:false},{text:"Klassische Bürocomputer",correct:false}], explanation:"Cyber-physische Systeme sind die Basis von Industrie 4.0."},
+            { id:48, category:"netzwerk", question:"Welche Smart Devices benötigen eine Serververnetzung?", options:[{text:"Smart Home, Wearables, Smart TVs, Sprachassistenten, vernetzte Sensoren",correct:true},{text:"Nur Desktop-PCs",correct:false},{text:"Nur Spielekonsolen",correct:false},{text:"Nur Grafikkarten",correct:false}], explanation:"Alle Geräte, die Cloud- oder Serverdienste brauchen."},
+            { id:49, category:"netzwerk", question:"Was bedeutet MRP?", options:[{text:"Material Requirements Planning",correct:true},{text:"Managed Resource Processing",correct:false},{text:"Multi Regional Protocol",correct:false},{text:"Main Reference Point",correct:false}], explanation:"MRP plant den Materialbedarf für die Produktion."},
+            { id:50, category:"netzwerk", question:"Was bedeutet HRM?", options:[{text:"Human Resource Management — Personalmanagement",correct:true},{text:"Hardware Resource Management",correct:false},{text:"High Resolution Monitoring",correct:false},{text:"Hybrid Relationship Model",correct:false}], explanation:"HRM umfasst alle Personalprozesse eines Unternehmens."},
+            { id:51, category:"netzwerk", question:"Was bedeutet FRM?", options:[{text:"Financial Resource Management — Finanzmanagement",correct:true},{text:"Fast Recovery Mode",correct:false},{text:"File Replication Manager",correct:false},{text:"Free RAM Memory",correct:false}], explanation:"FRM verwaltet alle finanziellen Ressourcen eines Unternehmens."},
 
-    <p class="hint">Tipp: Nutze die Suche, um gezielt nach Themen wie „Cloud“, „BGB“, „CPU“ oder „Arbeitsschutz“ zu filtern.</p>
-    <p class="footer-note">Hinweis: Einige sehr ähnliche oder doppelte Fragen wurden sinnvoll zusammengefasst.</p>
-  </div>
+            /* ======================== CLOUD DETAIL ======================== */
+            { id:52, category:"netzwerk", question:"Was ist kein typisches Cloud-Bezahlmodell?", options:[{text:"Einmalzahlung für unbegrenzte Nutzung",correct:true},{text:"Pay-as-you-go",correct:false},{text:"Subscription / Abo",correct:false},{text:"Flatrate / Pauschale",correct:false}], explanation:"Cloud Computing arbeitet mit nutzungsabhängigen oder Abomodellen."},
+            { id:53, category:"netzwerk", question:"Nennen Sie 5 Vorteile von Cloud Computing.", options:[{text:"Skalierbarkeit, geringe Anfangskosten, ortsunabhängiger Zugriff, schnelle Bereitstellung, hohe Verfügbarkeit",correct:true},{text:"Hohe Anschaffungskosten, lange Lieferzeiten, kein Support",correct:false},{text:"Komplette Datensouveränität, kein Internet nötig, unbegrenzte Ressourcen",correct:false},{text:"Fixe Kosten, vollständige Kontrolle, keine Abhängigkeit",correct:false}], explanation:"Skalierbarkeit und Flexibilität sind zentrale Vorteile."},
+            { id:54, category:"netzwerk", question:"Nennen Sie 5 Nachteile von Cloud Computing.", options:[{text:"Internetabhängigkeit, Anbieterabhängigkeit, Datenschutzrisiken, laufende Kosten, Lock-in-Effekt",correct:true},{text:"Hohe Anfangsinvestition, keine Skalierbarkeit",correct:false},{text:"Komplette Kontrolle, keine laufenden Kosten, volle Datensouveränität",correct:false},{text:"Langsame Bereitstellung, geringe Verfügbarkeit",correct:false}], explanation:"Internetabhängigkeit und Lock-in sind die wichtigsten Nachteile."},
+            { id:55, category:"netzwerk", question:"Nennen Sie 5 Managed-IT-Services.", options:[{text:"Managed Backup, Managed Firewall, Managed Server, Managed Workplace, Managed Network",correct:true},{text:"Managed Word, Managed Excel, Managed PowerPoint",correct:false},{text:"Managed Drucker, Managed Bildschirm, Managed Tastatur",correct:false},{text:"Managed Server nur allein",correct:false}], explanation:"Managed Services werden vom Provider vollständig betrieben."},
+            { id:56, category:"netzwerk", question:"Nennen Sie 4 Anforderungen bei der Vertragsgestaltung mit Providern.", options:[{text:"Klare Leistungsbeschreibung, SLA, Datenschutz, Exit-Strategie",correct:true},{text:"Niedrigster Preis, keine SLA, keine Datensicherung",correct:false},{text:"Freie Wahl beim Anbieter, keine Vertragsdauer",correct:false},{text:"Nur mündliche Absprache",correct:false}], explanation:"Leistung, Sicherheit, Datenschutz und Ausstiegsregelung sind Pflicht."},
 
-  <script>
-    const quizData = [
-      {
-        question: `Nennen Sie 3 Pioniere der Computertechnik`,
-        answer: `Charles Babbage
-Alan Turing
-Konrad Zuse`,
-        category: `Grundlagen`
-      },
-      {
-        question: `Was ist die von Neumann-Architektur?`,
-        answer: `Ein Grundkonzept für Computer, bei dem Programme und Daten im selben Speicher liegen.
-Typisch sind: Eingabe, Verarbeitung, Ausgabe sowie Steuerwerk, Rechenwerk und Speicher.`,
-        category: `Grundlagen`
-      },
-      {
-        question: `Was bedeutet Low-Code-Programmierung?`,
-        answer: `Softwareentwicklung mit sehr wenig manuellem Code.
-Stattdessen nutzt man grafische Oberflächen, Drag-and-Drop und vorgefertigte Bausteine.`,
-        category: `Software`
-      },
-      {
-        question: `Was bedeutet ERP?`,
-        answer: `Enterprise Resource Planning.
-Software zur Planung und Steuerung zentraler Unternehmensressourcen und -prozesse.`,
-        category: `Software`
-      },
-      {
-        question: `Welches ist das wichtigste Basismaterial für die Chipherstellung?`,
-        answer: `Silizium.`,
-        category: `Hardware`
-      },
-      {
-        question: `Was bedeutet OEM?`,
-        answer: `Original Equipment Manufacturer.
-Hersteller, der Komponenten oder Produkte für andere Marken fertigt.`,
-        category: `Wirtschaft`
-      },
-      {
-        question: `Was sind digitale Ökosysteme?`,
-        answer: `Vernetzte Plattformen, Unternehmen, Daten und Services, die gemeinsam Wert schaffen.`,
-        category: `Digitalisierung`
-      },
-      {
-        question: `Was bedeutet Abwärtskompatibilität?`,
-        answer: `Ein neues System kann ältere Hardware, Software oder Datenformate weiterhin nutzen.`,
-        category: `Digitalisierung`
-      },
-      {
-        question: `Was sind cyber-physische Systeme?`,
-        answer: `Systeme, die physische Prozesse mit digitaler Steuerung und Vernetzung verbinden.
-Beispiel: Smart Factory oder vernetzte Produktionsanlagen.`,
-        category: `Industrie 4.0`
-      },
-      {
-        question: `Was bedeutet Embedded-System?`,
-        answer: `Ein eingebettetes Computersystem, das in ein Gerät integriert ist und dort eine spezielle Aufgabe erfüllt.`,
-        category: `Hardware`
-      },
-      {
-        question: `Was ist ein Thin-Client?`,
-        answer: `Ein Rechner mit wenig lokaler Rechenleistung.
-Anwendungen und Daten liegen meist auf einem Server.`,
-        category: `Hardware`
-      },
-      {
-        question: `Welche Smart Devices benötigen eine Serververnetzung?`,
-        answer: `Typisch sind z. B.:
-- Smart-Home-Geräte
-- Smartwatches / Wearables
-- Smart TVs
-- Sprachassistenten
-- vernetzte Kameras und Sensoren`,
-        category: `Digitalisierung`
-      },
-      {
-        question: `Was bedeutet MAN?`,
-        answer: `Metropolitan Area Network.
-Ein stadtweites oder regionales Netzwerk.`,
-        category: `Netzwerke`
-      },
-      {
-        question: `Was bedeutet On-Premises?`,
-        answer: `IT wird im eigenen Unternehmen oder im eigenen Rechenzentrum betrieben.`,
-        category: `Cloud`
-      },
-      {
-        question: `Was ist ein Sachmangel? Nennen Sie 3 Arten.`,
-        answer: `Ein Sachmangel liegt vor, wenn die Ware nicht die vereinbarte oder übliche Beschaffenheit hat.
-Arten:
-- Qualitätsmangel
-- Quantitätsmangel
-- Falschlieferung / Aliud-Lieferung`,
-        category: `Recht`
-      },
-      {
-        question: `Nennen Sie 4 Qualitätskriterien nach ISO 25010`,
-        answer: `Beispiele:
-- Funktionale Eignung
-- Zuverlässigkeit
-- Benutzbarkeit
-- Sicherheit`,
-        category: `Qualität`
-      },
-      {
-        question: `Was bedeutet Datenschutz und was bedeutet Datensicherheit?`,
-        answer: `Datenschutz = Schutz personenbezogener Daten.
-Datensicherheit = Schutz von Daten vor Verlust, Manipulation und unbefugtem Zugriff.`,
-        category: `Recht`
-      },
-      {
-        question: `Nennen Sie 3 allgemeine Maßnahmen in Unternehmen zur Datensicherheit`,
-        answer: `- Regelmäßige Backups
-- Rechte- und Passwortkonzept
-- Updates, Patchmanagement und Virenschutz`,
-        category: `Sicherheit`
-      },
-      {
-        question: `Nennen Sie 3 Formfaktoren von Motherboards`,
-        answer: `ATX
-Micro-ATX
-Mini-ITX`,
-        category: `Hardware`
-      },
-      {
-        question: `Welches sind die Bestandteile der CPU?`,
-        answer: `- Rechenwerk (ALU)
-- Steuerwerk
-- Register / Cache`,
-        category: `Hardware`
-      },
-      {
-        question: `Was verstehen Sie unter dem Begriff Chipsatz?`,
-        answer: `Baustein, der die Kommunikation zwischen CPU, RAM, Massenspeicher und Peripherie steuert.`,
-        category: `Hardware`
-      },
-      {
-        question: `Was verstehen Sie unter JEDEC, TLC und NAS?`,
-        answer: `JEDEC = Joint Electron Device Engineering Council, Normungsgremium für Speicher- und Halbleiterstandards.
-TLC = Triple-Level-Cell, 3 Bit pro Speicherzelle.
-NAS = Network Attached Storage, netzwerkgebundener Speicher.`,
-        category: `Hardware`
-      },
-      {
-        question: `Nennen Sie 2 technische Verfahren bei Tintenstrahldruckern`,
-        answer: `- Thermisches Verfahren (Bubble-Jet)
-- Piezo-Verfahren`,
-        category: `Peripherie`
-      },
-      {
-        question: `Nennen Sie 2 Scannerarten und deren bevorzugte Einsatzgebiete`,
-        answer: `- Flachbettscanner: Fotos, Bücher, Dokumente
-- Dokumenteneinzugsscanner: viele lose Seiten, Archivierung`,
-        category: `Peripherie`
-      },
-      {
-        question: `Was ist eine Anti-Spy-Folie?`,
-        answer: `Eine Sichtschutzfolie fürs Display, die den Blickwinkel so einschränkt, dass Mitlesen von der Seite erschwert wird.`,
-        category: `Peripherie`
-      },
-      {
-        question: `Nennen Sie 4 gesetzliche Grundlagen zu barrierefreien Arbeitsplätzen`,
-        answer: `- SGB IX
-- BGG (Behindertengleichstellungsgesetz)
-- ArbSchG
-- ArbStättV`,
-        category: `Recht`
-      },
-      {
-        question: `Nennen Sie 3 Bezahlmodelle beim Cloud Computing`,
-        answer: `- Pay-as-you-go / nutzungsabhängig
-- Subscription / Abo
-- Flat Rate / Pauschale`,
-        category: `Cloud`
-      },
-      {
-        question: `Nennen Sie 5 Vorteile und 5 Nachteile von Cloud Computing`,
-        answer: `Vorteile:
-- Skalierbarkeit
-- geringe Anfangsinvestitionen
-- ortsunabhängiger Zugriff
-- schnelle Bereitstellung
-- hohe Verfügbarkeit
+            /* ======================== INDUSTRIE 4.0 ======================== */
+            { id:57, category:"industrie", question:"Was verstehen Sie unter Industrie 4.0?", options:[{text:"Die vierte industrielle Revolution durch Digitalisierung und Vernetzung",correct:true},{text:"Die Einführung von Bürocomputern",correct:false},{text:"Die vierte Generation von Handys",correct:false},{text:"Ein Computerhersteller",correct:false}], explanation:"Industrie 4.0 verbindet Maschinen, Systeme und Menschen."},
+            { id:58, category:"industrie", question:"Warum sind Insellösungen bei Software nicht mehr zeitgemäß?", options:[{text:"Sie erzeugen Datensilos, Medienbrüche und mangelnde Integration",correct:true},{text:"Sie sind zu billig",correct:false},{text:"Sie sind zu schnell",correct:false},{text:"Sie benötigen wenig Wartung",correct:false}], explanation:"Moderne Unternehmen brauchen integrierte, durchgängige Prozesse."},
+            { id:59, category:"industrie", question:"Wofür dient ein Sensor?", options:[{text:"Er erfasst physikalische Größen und wandelt sie in elektrische Signale um",correct:true},{text:"Er führt Aktionen aus",correct:false},{text:"Er speichert Daten",correct:false},{text:"Er zeigt Daten auf einem Bildschirm an",correct:false}], explanation:"Sensoren messen z. B. Temperatur, Druck, Licht."},
+            { id:60, category:"industrie", question:"Wofür dient ein Aktor?", options:[{text:"Er setzt Steuersignale in physische Aktionen um",correct:true},{text:"Er misst physikalische Größen",correct:false},{text:"Er berechnet Daten",correct:false},{text:"Er speichert Messwerte",correct:false}], explanation:"Aktoren sind Motoren, Ventile, Schalter — sie handeln."},
 
-Nachteile:
-- Internetabhängigkeit
-- Abhängigkeit vom Anbieter
-- Datenschutz-/Sicherheitsrisiken
-- laufende Kosten
-- möglicher Lock-in-Effekt`,
-        category: `Cloud`
-      },
-      {
-        question: `Nennen Sie 5 Managed-IT-Services`,
-        answer: `- Managed Backup
-- Managed Firewall / Security
-- Managed Server
-- Managed Workplace
-- Managed Network`,
-        category: `IT-Services`
-      },
-      {
-        question: `Was verstehen Sie unter SLAs?`,
-        answer: `Service Level Agreements: vertraglich vereinbarte Servicequalität, z. B. Verfügbarkeit, Reaktionszeit, Wiederherstellungszeit und Supportzeiten.`,
-        category: `IT-Services`
-      },
-      {
-        question: `Was verstehen Sie unter dem Begriff Erfüllungsgeschäft?`,
-        answer: `Die tatsächliche Durchführung des Vertrags, z. B. Übergabe, Übereignung oder Zahlung.`,
-        category: `Recht`
-      },
-      {
-        question: `Was verstehen Sie unter dem Verpflichtungsgeschäft?`,
-        answer: `Der rechtliche Vertrag, der Pflichten begründet, z. B. ein Kaufvertrag oder Werkvertrag.`,
-        category: `Recht`
-      },
-      {
-        question: `Welche Besonderheiten müssen bei der Beschaffung von IT bei Behörden berücksichtigt werden?`,
-        answer: `- Vergaberecht / Ausschreibungspflicht
-- Transparenz und Gleichbehandlung
-- Wirtschaftlichkeit
-- vollständige Dokumentation
-- technische Neutralität und Vergleichbarkeit der Angebote`,
-        category: `Beschaffung`
-      },
-      {
-        question: `Was verstehen Sie unter AIDA?`,
-        answer: `AIDA steht für:
-Attention
-Interest
-Desire
-Action`,
-        category: `Marketing`
-      },
-      {
-        question: `Nennen Sie 3 Aufgabenbereiche des Marketings`,
-        answer: `- Marktforschung und Marktanalyse
-- Marketingstrategie und -planung
-- Umsetzung und Kontrolle von Marketingmaßnahmen`,
-        category: `Marketing`
-      },
-      {
-        question: `Was ist der Unterschied zwischen Markterkundung und Marktbeobachtung?`,
-        answer: `Markterkundung = gezielte, meist einmalige Informationssuche.
-Marktbeobachtung = laufende, systematische Beobachtung des Marktes.`,
-        category: `Marketing`
-      },
-      {
-        question: `Das Lastenheft beantwortet die Fragen was und wofür. Welche Fragen beantwortet das Pflichtenheft?`,
-        answer: `Das Pflichtenheft beantwortet:
-- wie
-- womit
-- wodurch
-- bis wann`,
-        category: `Projekt`
-      },
-      {
-        question: `Der PSP kann nach verschiedenen Kriterien aufgeteilt werden. Nennen Sie 3 Kriterien.`,
-        answer: `- nach Funktionen
-- nach Objekten
-- nach Projektphasen`,
-        category: `Projekt`
-      },
-      {
-        question: `Der Gesamtpuffer berechnet sich in einem Netzplan durch ...?`,
-        answer: `Gesamtpuffer = spätester Anfang - frühester Anfang
-oder:
-Gesamtpuffer = spätestes Ende - frühestes Ende`,
-        category: `Projekt`
-      },
-      {
-        question: `Was verstehen Sie unter Refurbishing?`,
-        answer: `Professionelle Wiederaufbereitung gebrauchter IT-Geräte zur erneuten Nutzung oder zum Weiterverkauf.`,
-        category: `IT`
-      },
-      {
-        question: `Was verstehen Sie unter DaaS und VDI? Nennen Sie je 4 Vor- und Nachteile.`,
-        answer: `VDI = Virtual Desktop Infrastructure.
-DaaS = Desktop as a Service.
+            /* ======================== RECHT & BWL ======================== */
+            { id:61, category:"recht", question:"Was ist ein Sachmangel? Nennen Sie 3 Arten.", options:[{text:"Ware entspricht nicht der vereinbarten Beschaffenheit — Arten: Qualitäts-, Quantitäts-, Falschlieferung",correct:true},{text:"Der Preis ist zu hoch",correct:false},{text:"Die Lieferung ist verspätet",correct:false},{text:"Der Verkäufer ist insolvent",correct:false}], explanation:"Sachmangel liegt vor, wenn Ist-Zustand ≠ Soll-Zustand."},
+            { id:62, category:"recht", question:"Was versteht man unter einem Rechtsmangel?", options:[{text:"Die Ware ist mit Rechten Dritter belastet (z. B. Eigentum, Pfandrecht)",correct:true},{text:"Die Ware ist qualitativ schlecht",correct:false},{text:"Die Ware ist falsch geliefert",correct:false},{text:"Der Verkäufer hat keine Lizenz",correct:false}], explanation:"Beim Rechtsmangel fehlt dem Käufer das Recht, die Sache zu nutzen."},
+            { id:63, category:"recht", question:"Nennen Sie 3 wichtige Vertragsarten nach BGB.", options:[{text:"Kaufvertrag, Werkvertrag, Dienstvertrag",correct:true},{text:"Mietvertrag, Leasingvertrag, Darlehensvertrag",correct:false},{text:"Arbeitsvertrag, Gesellschaftsvertrag, Lizenzvertrag",correct:false},{text:"Versicherungsvertrag, Schenkungsvertrag, Bürgschaft",correct:false}], explanation:"Die drei Grundvertragstypen des BGB."},
+            { id:64, category:"recht", question:"Nennen Sie 3 Gründe für nichtige Verträge.", options:[{text:"Geschäftsunfähigkeit, Formmangel, Sittenwidrigkeit / gesetzliches Verbot",correct:true},{text:"Preis zu hoch, Lieferzeit zu lang",correct:false},{text:"Kein schriftlicher Vertrag",correct:false},{text:"Nur mündliche Zusage",correct:false}], explanation:"Nichtig sind Verträge, die gegen elementare Rechtsnormen verstoßen."},
+            { id:65, category:"recht", question:"Was verstehen Sie unter dem Erfüllungsgeschäft?", options:[{text:"Die tatsächliche Durchführung — z. B. Übergabe, Übereignung, Zahlung",correct:true},{text:"Der Kaufvertrag selbst",correct:false},{text:"Die Mängelrüge",correct:false},{text:"Die Abnahme des Werks",correct:false}], explanation:"Erfüllungsgeschäft = tatsächliche Vollzug der Leistung."},
+            { id:66, category:"recht", question:"Was verstehen Sie unter dem Verpflichtungsgeschäft?", options:[{text:"Der rechtsbegründende Vertrag — z. B. Kaufvertrag",correct:true},{text:"Die Bezahlung der Ware",correct:false},{text:"Die Lieferung der Ware",correct:false},{text:"Die Abnahme des Werks",correct:false}], explanation:"Verpflichtungsgeschäft begründet die Pflicht zur Leistung."},
+            { id:67, category:"recht", question:"Was bedeutet ein einseitiger Handelskauf?", options:[{text:"Nur eine der beiden Vertragsparteien ist Kaufmann",correct:true},{text:"Es wird nur eine Ware verkauft",correct:false},{text:"Nur eine Seite hat Rechte",correct:false},{text:"Der Kaufvertrag ist einseitig",correct:false}], explanation:"Beim einseitigen Handelskauf gilt nur eingeschränkt das HGB."},
+            { id:68, category:"recht", question:"Was bedeutet ein zweiseitiger Handelskauf?", options:[{text:"Beide Vertragsparteien sind Kaufleute",correct:true},{text:"Zwei Waren werden gehandelt",correct:false},{text:"Zwei Kaufverträge werden geschlossen",correct:false},{text:"Der Kauf hat zwei Preise",correct:false}], explanation:"Beim zweiseitigen Handelskauf gilt § 377 HGB mit Prüf- und Rügepflicht."},
+            { id:69, category:"recht", question:"Was gilt bei der Überprüfung gelieferter Ware im zweiseitigen Handelskauf?", options:[{text:"Ware unverzüglich prüfen — Mängel sofort (offensichtlich) oder nach Entdeckung (versteckt) rügen",correct:true},{text:"Ware muss erst nach 4 Wochen geprüft werden",correct:false},{text:"Keine Prüfpflicht — nur reklamieren wenn Ware kaputt ist",correct:false},{text:"Nur der Verkäufer prüft die Ware",correct:false}], explanation:"§ 377 HGB regelt die Untersuchungs- und Rügepflicht."},
+            { id:70, category:"recht", question:"Was bedeutet ein Werkvertrag?", options:[{text:"Ein Vertrag, bei dem ein bestimmter Erfolg geschuldet wird",correct:true},{text:"Ein Vertrag über den Kauf einer Sache",correct:false},{text:"Ein Vertrag, bei dem nur eine Tätigkeit geschuldet wird",correct:false},{text:"Ein Vertrag zur Miete einer Immobilie",correct:false}], explanation:"Werkvertrag (§ 631 BGB) — Erfolg = Abnahme."},
+            { id:71, category:"recht", question:"Was bedeutet ein Dienstleistungsvertrag?", options:[{text:"Ein Vertrag, bei dem eine Tätigkeit geschuldet wird — ohne garantierten Erfolg",correct:true},{text:"Ein Vertrag über den Kauf einer Sache",correct:false},{text:"Ein Vertrag über eine Bauleistung",correct:false},{text:"Ein Vertrag über die Miete einer Wohnung",correct:false}], explanation:"Dienstvertrag (§ 611 BGB) — Tätigkeit ohne Erfolgsgarantie."},
+            { id:72, category:"recht", question:"Was gilt für die Abnahme bei einem Werkvertrag?", options:[{text:"Werk prüfen — wenn vertragsgemäß: Abnahme erklären — dann wird Vergütung fällig und Gewährleistung beginnt",correct:true},{text:"Abnahme ist freiwillig und hat keine Folgen",correct:false},{text:"Nur der Unternehmer kann abnehmen",correct:false},{text:"Abnahme kann nie verweigert werden",correct:false}], explanation:"Die Abnahme ist ein zentraler Zeitpunkt im Werkvertrag."},
+            { id:73, category:"recht", question:"Was verstehen Sie unter der Handelsspanne?", options:[{text:"Differenz zwischen Einkaufs- und Verkaufspreis",correct:true},{text:"Die Marge bei Aktienhandel",correct:false},{text:"Der Zinssatz bei Banken",correct:false},{text:"Die Gewinnspanne bei Immobilien",correct:false}], explanation:"Handelsspanne = VK − EK (meist in % oder €)."},
+            { id:74, category:"recht", question:"Nennen Sie die Nachteile von AGB (Allgemeine Geschäftsbedingungen).", options:[{text:"Einseitig vorgegeben, nicht individuell ausgehandelt, oft schwer verständlich, können benachteiligen",correct:true},{text:"Sie schützen den Kunden immer",correct:false},{text:"Sie sind immer vorteilhaft für beide Seiten",correct:false},{text:"Sie sind gesetzlich vorgeschrieben",correct:false}], explanation:"AGB sind vorformuliert und gelten für viele Verträge."},
 
-Vorteile:
-- ortsunabhängig
-- zentrale Administration
-- geringe Hardwareanforderungen
-- schnelle Bereitstellung
+            /* ======================== BESCHAFFUNG & HANDEL ======================== */
+            { id:75, category:"bwl", question:"Beschreiben Sie den Leistungsprozess der Anfrage und Auftragsbearbeitung mit Handelswaren.", options:[{text:"Anfrage → Angebot → Angebotsvergleich → Bestellung → Auftragsbestätigung → Lieferung → Wareneingangsprüfung → Rechnung → Zahlung",correct:true},{text:"Bestellung → Lieferung → Bezahlung",correct:false},{text:"Angebot → Rechnung → Zahlung",correct:false},{text:"Nur: Ware bestellen und bezahlen",correct:false}], explanation:"Der Beschaffungsprozess umfasst alle Schritte vom Bedarf bis zur Zahlung."},
+            { id:76, category:"bwl", question:"Nennen Sie die Aufgaben der Beschaffungsplanung.", options:[{text:"Bedarfsermittlung, Mengen- und Terminplanung, Lieferantenauswahl, Bestellmengen, Kostenabstimmung",correct:true},{text:"Nur Ware bestellen",correct:false},{text:"Nur den Preis verhandeln",correct:false},{text:"Nur den Lagerbestand zählen",correct:false}], explanation:"Beschaffungsplanung sichert die Versorgung effizient und kostengünstig."},
+            { id:77, category:"bwl", question:"Beschreiben Sie die Eigenschaften von C-Artikeln.", options:[{text:"Viele Artikel, geringer Einzelwert, geringer Wertanteil, hoher Verwaltungsaufwand im Verhältnis",correct:true},{text:"Wenige, teure, wichtige Artikel",correct:false},{text:"Artikel mit höchstem Umsatz",correct:false},{text:"Individuell gefertigte Artikel",correct:false}], explanation:"C-Artikel werden oft mit automatischer Nachbestellung verwaltet."},
+            { id:78, category:"bwl", question:"Unterscheiden Sie qualitative und quantitative Bewertungskriterien.", options:[{text:"Quantitativ = messbar (Preis, Menge), Qualitativ = beschreibend (Qualität, Service, Zuverlässigkeit)",correct:true},{text:"Qualitativ = messbar, Quantitativ = subjektiv",correct:false},{text:"Beides ist dasselbe",correct:false},{text:"Qualitativ = immer besser",correct:false}], explanation:"Beide Kriterien zusammen ergeben eine fundierte Bewertung."},
+            { id:79, category:"bwl", question:"Nennen Sie 3 qualitative Bewertungskriterien bei der Angebotbewertung.", options:[{text:"Qualität, Service, Zuverlässigkeit, Flexibilität",correct:true},{text:"Nur der niedrigste Preis",correct:false},{text:"Schnellste Lieferzeit",correct:false},{text:"Größter Lagerbestand",correct:false}], explanation:"Qualitative Kriterien sind schwer in Zahlen messbar."},
 
-Nachteile:
-- Internetabhängigkeit
-- laufende Kosten
-- Datenschutzfragen
-- Performance hängt von der Verbindung ab`,
-        category: `Cloud`
-      },
-      {
-        question: `Beschreiben Sie den Leistungsprozess der Anfrage und Auftragsbearbeitung mit Handelswaren`,
-        answer: `Anfrage → Angebot → Angebotsvergleich → Bestellung / Auftrag → Auftragsbestätigung → Lieferung → Wareneingangsprüfung → Rechnung → Zahlung`,
-        category: `Beschaffung`
-      },
-      {
-        question: `Nennen Sie die Aufgaben der Beschaffungsplanung`,
-        answer: `- Bedarf ermitteln
-- Mengen und Termine planen
-- Lieferanten auswählen
-- Bestellmengen und Lagerbestand festlegen
-- Kosten, Qualität und Lieferzeiten abstimmen`,
-        category: `Beschaffung`
-      },
-      {
-        question: `Beschreiben Sie die Eigenschaften von C-Artikeln`,
-        answer: `- viele Artikel mit geringem Einzelwert
-- geringer Anteil am Gesamtwert
-- hoher Verwaltungsaufwand im Verhältnis zum Wert
-- meist Standardartikel`,
-        category: `Beschaffung`
-      },
-      {
-        question: `Unterscheiden Sie qualitative und quantitative Bewertungskriterien`,
-        answer: `Quantitativ = messbar, z. B. Preis, Lieferzeit, Menge.
-Qualitativ = eher beschreibend, z. B. Qualität, Service, Zuverlässigkeit, Flexibilität.`,
-        category: `Bewertung`
-      },
-      {
-        question: `Nennen Sie 3 wichtige Vertragsarten nach BGB`,
-        answer: `- Kaufvertrag
-- Werkvertrag
-- Dienstvertrag`,
-        category: `Recht`
-      },
-      {
-        question: `Nennen Sie 3 Gründe für nichtige Verträge`,
-        answer: `- Geschäftsunfähigkeit
-- Formmangel
-- gesetzliches Verbot oder Sittenwidrigkeit`,
-        category: `Recht`
-      },
-      {
-        question: `Nennen Sie die Nachteile der AGB`,
-        answer: `- nicht individuell ausgehandelt
-- oft einseitig vorgegeben
-- teilweise schwer verständlich
-- können den Vertragspartner benachteiligen`,
-        category: `Recht`
-      },
-      {
-        question: `Was ist ein einseitiger und was ist ein zweiseitiger Handelskauf? Welche Bedingungen gelten bei der Überprüfung gelieferter Ware?`,
-        answer: `Einseitiger Handelskauf: nur eine Seite ist Kaufmann.
-Zweiseitiger Handelskauf: beide Seiten sind Kaufleute.
+            /* ======================== MARKETING ======================== */
+            { id:80, category:"bwl", question:"Was bedeutet AIDA im Marketing?", options:[{text:"Attention – Interest – Desire – Action (Aufmerksamkeit, Interesse, Wunsch, Handlung)",correct:true},{text:"Analyse – Implementierung – Durchführung – Abschluss",correct:false},{text:"Angebot – Information – Diskussion – Abschluss",correct:false},{text:"Advertising – Integration – Distribution – Aftersales",correct:false}], explanation:"AIDA ist das klassische Kommunikationsmodell."},
+            { id:81, category:"bwl", question:"Nennen Sie 3 Aufgabenbereiche des Marketings.", options:[{text:"Marktforschung, Marketingstrategie, Umsetzung und Kontrolle von Maßnahmen",correct:true},{text:"Nur Werbung schalten",correct:false},{text:"Nur Preise festlegen",correct:false},{text:"Nur Produkte herstellen",correct:false}], explanation:"Marketing umfasst Analyse, Planung, Umsetzung und Kontrolle."},
+            { id:82, category:"bwl", question:"Was ist der Unterschied zwischen Markterkundung und Marktbeobachtung?", options:[{text:"Markterkundung = gezielte, einmalige Informationssuche; Marktbeobachtung = laufende, systematische Beobachtung",correct:true},{text:"Beides ist dasselbe",correct:false},{text:"Marktbeobachtung ist einmalig, Markterkundung laufend",correct:false},{text:"Markterkundung ist nur für große Unternehmen",correct:false}], explanation:"Markterkundung ist punktuell, Marktbeobachtung kontinuierlich."},
 
-Bei zweiseitigem Handelskauf gilt § 377 HGB:
-- Ware unverzüglich prüfen
-- offensichtliche Mängel sofort rügen
-- versteckte Mängel nach Entdeckung unverzüglich rügen`,
-        category: `Handel`
-      },
-      {
-        question: `Nennen Sie 3 verantwortliche Stellen für die Arbeitssicherheit`,
-        answer: `- Arbeitgeber
-- Fachkraft für Arbeitssicherheit
-- Betriebsarzt
-(je nach Betrieb auch Sicherheitsbeauftragter)`,
-        category: `Arbeitsschutz`
-      },
-      {
-        question: `Nennen Sie 3 wichtige Rechtsvorschriften zum Arbeitsschutz`,
-        answer: `- Arbeitsschutzgesetz (ArbSchG)
-- Arbeitsstättenverordnung (ArbStättV)
-- Betriebssicherheitsverordnung (BetrSichV)
-(ergänzend oft: DGUV-Vorschriften)`,
-        category: `Arbeitsschutz`
-      },
-      {
-        question: `Nennen Sie die 5 wichtigsten Sicherheitsregeln bei Arbeiten an elektrischen Anlagen`,
-        answer: `1. Freischalten
-2. Gegen Wiedereinschalten sichern
-3. Spannungsfreiheit feststellen
-4. Erden und kurzschließen
-5. Benachbarte unter Spannung stehende Teile abdecken oder abschranken`,
-        category: `Arbeitsschutz`
-      },
-      {
-        question: `Nennen Sie alternative Begriffe für das Pflichtenheft`,
-        answer: `- Leistungsbeschreibung
-- Spezifikation
-- Anforderungsspezifikation
-- Feinspezifikation`,
-        category: `Projekt`
-      },
-      {
-        question: `Was versteht man unter Zielkonflikten? Was bedeutet SMART?`,
-        answer: `Zielkonflikte: Ziele behindern sich gegenseitig, z. B. hohe Qualität vs. niedrige Kosten.
+            /* ======================== PROJEKTMANAGEMENT ======================== */
+            { id:83, category:"projekt", question:"Das Lastenheft beantwortet die Fragen „was\" und „wofür\". Welche Fragen beantwortet das Pflichtenheft?", options:[{text:"Wie, womit, wodurch und bis wann",correct:true},{text:"Warum und wann",correct:false},{text:"Wer und wo",correct:false},{text:"Was und wofür",correct:false}], explanation:"Pflichtenheft = technische Umsetzung, Lastenheft = Anforderungen."},
+            { id:84, category:"projekt", question:"Der PSP kann nach verschiedenen Kriterien aufgeteilt werden. Nennen Sie 3 Kriterien.", options:[{text:"Nach Funktionen, Objekten, Phasen",correct:true},{text:"Nach Kosten, Zeit, Qualität",correct:false},{text:"Nach Abteilungen, Standorten, Mitarbeitern",correct:false},{text:"Nach Budget, Risiken, Chancen",correct:false}], explanation:"PSP = Projektstrukturplan."},
+            { id:85, category:"projekt", question:"Wie berechnet sich der Gesamtpuffer in einem Netzplan?", options:[{text:"Spätester Anfang minus frühester Anfang (SA − FA)",correct:true},{text:"Summe aller Vorgangsdauern",correct:false},{text:"Kritische Pfadlänge dividiert durch 2",correct:false},{text:"Anzahl der Vorgänge mal 10 %",correct:false}], explanation:"Gesamtpuffer = SA − FA oder SE − FE."},
+            { id:86, category:"projekt", question:"Was bedeutet SMART bei der Zielformulierung?", options:[{text:"Spezifisch, Messbar, Akzeptiert, Realistisch, Terminiert",correct:true},{text:"Schnell, Modern, Attraktiv, Revolutionär, Trendig",correct:false},{text:"Systematisch, Modular, Automatisiert, Robust, Transparent",correct:false},{text:"Sicher, Modular, Adaptiv, Resilient, Taktisch",correct:false}], explanation:"SMART ist ein bewährtes Zielsetzungsmodell."},
+            { id:87, category:"projekt", question:"Was versteht man unter Zielkonflikten?", options:[{text:"Ziele behindern sich gegenseitig, z. B. Qualität vs. Kosten",correct:true},{text:"Ziele werden nicht erreicht",correct:false},{text:"Es gibt nur ein Ziel",correct:false},{text:"Ziele sind nicht messbar",correct:false}], explanation:"Zielkonflikte erfordern eine Priorisierung."},
+            { id:88, category:"projekt", question:"Nennen Sie alternative Begriffe für das Pflichtenheft.", options:[{text:"Leistungsbeschreibung, Spezifikation, Anforderungsspezifikation",correct:true},{text:"Lastenheft, Wishlist, Anforderungskatalog",correct:false},{text:"Projektplan, Zeitplan, Meilensteinplan",correct:false},{text:"Angebot, Kostenvoranschlag, Budget",correct:false}], explanation:"Pflichtenheft und Spezifikation sind Synonyme."},
+            { id:89, category:"projekt", question:"Was verstehen Sie unter einem Projektstrukturplan (PSP)?", options:[{text:"Hierarchische Zerlegung des Projekts in Teilleistungen und Pakete",correct:true},{text:"Der Zeitplan des Projekts",correct:false},{text:"Das Budget des Projekts",correct:false},{text:"Die Liste der Projektmitarbeiter",correct:false}], explanation:"PSP ist die Grundstruktur jedes Projekts."},
 
-SMART:
-- spezifisch
-- messbar
-- akzeptiert / attraktiv
-- realistisch
-- terminiert`,
-        category: `Management`
-      },
-      {
-        question: `Was verstehen Sie unter IT-Rollback?`,
-        answer: `Rückkehr auf einen vorherigen, funktionierenden System- oder Versionsstand, z. B. nach einem fehlgeschlagenen Update.`,
-        category: `IT`
-      },
-      {
-        question: `Welche Displayarten kennen Sie? Welche Nachteile hat ein VA-Panel, welche Vorteile hat ein IPS-Panel und welche maximale Auflösung bietet HDMI 2.0?`,
-        answer: `Displayarten: TN, VA, IPS, OLED.
+            /* ======================== ARBEITSSICHERHEIT ======================== */
+            { id:90, category:"arbeitsschutz", question:"Nennen Sie 3 verantwortliche Stellen für die Arbeitssicherheit.", options:[{text:"Arbeitgeber, Fachkraft für Arbeitssicherheit, Betriebsarzt",correct:true},{text:"Nur der Betriebsrat",correct:false},{text:"Nur die Geschäftsführung",correct:false},{text:"Nur die IT-Abteilung",correct:false}], explanation:"Der Arbeitgeber trägt die Hauptverantwortung."},
+            { id:91, category:"arbeitsschutz", question:"Nennen Sie 3 wichtige Rechtsvorschriften zum Arbeitsschutz.", options:[{text:"ArbSchG, ArbStättV, BetrSichV",correct:true},{text:"BGB, HGB, StGB",correct:false},{text:"GDPR, DSGVO, TTDSG",correct:false},{text:"Telekommunikationsgesetz, Urheberrecht, Markenrecht",correct:false}], explanation:"ArbSchG = Arbeitsschutzgesetz, ArbStättV = Arbeitsstättenverordnung."},
+            { id:92, category:"arbeitsschutz", question:"Nennen Sie die 5 wichtigsten Sicherheitsregeln bei Arbeiten an elektrischen Anlagen.", options:[{text:"Freischalten, Sichern gegen Wiedereinschalten, Spannungsfreiheit feststellen, Erden und kurzschließen, Benachbarte Teile abdecken",correct:true},{text:"Schutzbrille, Handschuhe, Helm, Sicherheitsschuhe, Weste",correct:false},{text:"Abschalten, Reinigen, Prüfen, Dokumentieren, Melden",correct:false},{text:"Nur qualifizierte Elektriker — keine weiteren Regeln nötig",correct:false}], explanation:"Die fünf Sicherheitsregeln sind internationaler Standard."},
+            { id:93, category:"arbeitsschutz", question:"Nennen Sie 4 gesetzliche Grundlagen zu barrierefreien Arbeitsplätzen.", options:[{text:"SGB IX, BGG, ArbSchG, ArbStättV",correct:true},{text:"BGB, HGB, DSGVO, Telekommunikationsgesetz",correct:false},{text:"Nur das Gleichstellungsgesetz",correct:false},{text:"Keine gesetzlichen Grundlagen — nur freiwillig",correct:false}], explanation:"Barrierefreiheit ist gesetzlich geregelt (Behindertengleichstellung)."},
 
-VA-Nachteile:
-- langsamere Reaktionszeit
-- mögliches Black Smearing
-- Blickwinkel meist schwächer als IPS
+            /* ======================== QUALITÄT & DATENSCHUTZ ======================== */
+            { id:94, category:"recht", question:"Nennen Sie 4 Qualitätskriterien nach ISO 25010.", options:[{text:"Funktionalität, Zuverlässigkeit, Benutzbarkeit, Sicherheit",correct:true},{text:"Preis, Lieferzeit, Menge, Verfügbarkeit",correct:false},{text:"Größe, Gewicht, Farbe, Material",correct:false},{text:"Design, Verpackung, Garantie, Support",correct:false}], explanation:"ISO 25010 definiert Softwarequalitätskriterien."},
+            { id:95, category:"recht", question:"Was bedeutet Datenschutz?", options:[{text:"Schutz personenbezogener Daten und der Privatsphäre vor unzulässiger Verarbeitung",correct:true},{text:"Schutz von Daten vor Verlust",correct:false},{text:"Technische Datensicherung",correct:false},{text:"Verschlüsselung von Dateien",correct:false}], explanation:"Datenschutz betrifft Persönlichkeitsrechte (DSGVO)."},
+            { id:96, category:"recht", question:"Was bedeutet Datensicherheit?", options:[{text:"Schutz von Daten und IT-Systemen vor Verlust, Manipulation und unbefugtem Zugriff",correct:true},{text:"Nur der Schutz personenbezogener Daten",correct:false},{text:"Die Datensicherung durch Backups",correct:false},{text:"Der Schutz vor Viren",correct:false}], explanation:"Datensicherheit = technischer und organisatorischer Schutz."},
+            { id:97, category:"recht", question:"Nennen Sie 3 allgemeine Maßnahmen in Unternehmen zur Datensicherheit.", options:[{text:"Regelmäßige Backups, Zugriffsrechte und Passwortregeln, Updates und Virenschutz",correct:true},{text:"Keine Passwörter verwenden",correct:false},{text:"Alle Daten offen lassen",correct:false},{text:"Nur Papier verwenden",correct:false}], explanation:"Technische, organisatorische und physische Maßnahmen."},
 
-IPS-Vorteile:
-- sehr gute Blickwinkel
-- gute Farbdarstellung
-- hohe Farbtreue
+            /* ======================== BESCHAFFUNG BEHÖRDEN ======================== */
+            { id:98, category:"recht", question:"Welche Besonderheiten müssen bei der Beschaffung von IT bei Behörden berücksichtigt werden?", options:[{text:"Vergaberecht, Transparenz, Gleichbehandlung, Wirtschaftlichkeit, Dokumentationspflicht, technische Neutralität",correct:true},{text:"Keine Besonderheiten — wie normale Beschaffung",correct:false},{text:"Niedrigster Preis ist immer entscheidend",correct:false},{text:"Nur lokale Anbieter dürfen bieten",correct:false}], explanation:"Vergaberecht (GWB, VgV, UVgO) regelt die öffentliche Beschaffung."},
 
-HDMI 2.0:
-- bis 4K/UHD mit 60 Hz
-- 3840 × 2160`,
-        category: `Hardware`
-      },
-      {
-        question: `Was verstehen Sie unter DaaS? Nennen Sie je 3 Vor- und Nachteile.`,
-        answer: `DaaS = Desktop as a Service.
+            /* ======================== LEASING & FINANZEN ======================== */
+            { id:99, category:"bwl", question:"Nennen Sie die Vorteile von Leasing.", options:[{text:"Geringe Anfangsinvestition, Liquidität bleibt, planbare Raten, steuerliche Vorteile, aktuelle Technik",correct:true},{text:"Das Gerät gehört sofort Ihnen",correct:false},{text:"Es gibt keine Nachteile",correct:false},{text:"Immer billiger als Kauf",correct:false}], explanation:"Leasing schon Ressourcen und bietet Planungssicherheit."},
+            { id:100, category:"bwl", question:"Wie lange darf die Grundlaufzeit des Leasings maximal sein?", options:[{text:"Ca. 40–90 % der wirtschaftlichen Nutzungsdauer",correct:true},{text:"Unbegrenzt",correct:false},{text:"Maximal 1 Jahr",correct:false},{text:"Genau 50 % der Nutzungsdauer",correct:false}], explanation:"Die Grundlaufzeit orientiert sich an der Nutzungsdauer."},
+            { id:101, category:"bwl", question:"Was ist der grundlegende Unterschied zwischen Miete und Leasing?", options:[{text:"Miete = Gebrauchsüberlassung (kurzfristig); Leasing = Finanzierungsform (längerfristig, mit Optionen)",correct:true},{text:"Es gibt keinen Unterschied",correct:false},{text:"Leasing ist immer teurer als Miete",correct:false},{text:"Miete ist eine Finanzierungsform",correct:false}], explanation:"Leasing hat finanzierungsähnlichen Charakter."},
 
-Vorteile:
-- ortsunabhängiger Zugriff
-- geringe lokale Hardwareanforderungen
-- zentrale Verwaltung
+            /* ======================== SOFTWARE ======================== */
+            { id:102, category:"netzwerk", question:"In welche 2 Bereichen kann man einen Softwarekatalog aufteilen?", options:[{text:"Systemsoftware und Anwendungssoftware",correct:true},{text:"Kostenlose und kostenpflichtige Software",correct:false},{text:"Desktop- und Mobilsoftware",correct:false},{text:"Open Source und Closed Source",correct:false}], explanation:"Die Grundunterscheidung in der Softwareklassifikation."},
+            { id:103, category:"netzwerk", question:"Nennen Sie 4 Softwarearten für die betriebliche Verwaltung.", options:[{text:"Textverarbeitung, Tabellenkalkulation, Präsentation, Datenbank",correct:true},{text:"Videospiele, Bildbearbeitung, Musikplayer",correct:false},{text:"Nur ERP-System",correct:false},{text:"Nur Office-Paket",correct:false}], explanation:"Bürosoftware ist die Basis der betrieblichen Informatik."},
+            { id:104, category:"netzwerk", question:"Welche Softwaremodule sind typischerweise in einem ERP-System enthalten?", options:[{text:"Einkauf, Verkauf, Lager, Produktion, Finanzen, Controlling, Personal",correct:true},{text:"Nur Buchhaltung",correct:false},{text:"Nur Warenwirtschaft",correct:false},{text:"Nur CRM",correct:false}], explanation:"ERP integriert alle Unternehmensbereiche."},
 
-Nachteile:
-- Internetabhängigkeit
-- laufende Kosten
-- Datenschutz- und Sicherheitsfragen`,
-        category: `Cloud`
-      },
-      {
-        question: `Was bedeutet VDI? Was ist ein Cloud-Client?`,
-        answer: `VDI = Virtual Desktop Infrastructure.
+            /* ======================== BERECHNUNGEN ======================== */
+            { id:105, category:"berechnung", question:"Berechnen Sie die Stromstärke: Festplatte 12 V, 24 W Leistungsaufnahme.", options:[{text:"2 Ampere (I = 24 W / 12 V)",correct:true},{text:"0,5 Ampere",correct:false},{text:"12 Ampere",correct:false},{text:"3 Ampere",correct:false}], explanation:"I = P / U = 24 / 12 = 2 A."},
+            { id:106, category:"berechnung", question:"Wie hoch ist der jährliche Energiebedarf? 8 Rechner, je 400 W, 8 h/Tag, 185 Tage/Jahr.", options:[{text:"4736 kWh (8 × 0,4 kW × 8 h × 185 Tage)",correct:true},{text:"2368 kWh",correct:false},{text:"9472 kWh",correct:false},{text:"592 kWh",correct:false}], explanation:"Leistung × Zeit = Energie (in kWh)."},
+            { id:107, category:"berechnung", question:"Berechnen Sie die Amortisationszeit: Investition 5.500 €, Einsparung 6 h/Monat à 80 €.", options:[{text:"Ca. 11,5 Monate (5500 / 480)",correct:true},{text:"Ca. 6 Monate",correct:false},{text:"Ca. 24 Monate",correct:false},{text:"Ca. 36 Monate",correct:false}], explanation:"Monatliche Einsparung = 480 €, Amortisation = 5500 / 480."},
 
-Cloud-Client = Endgerät oder Programm, das Cloud-Dienste nutzt, z. B. Browser, App oder Thin Client.`,
-        category: `Cloud`
-      },
-      {
-        question: `Nennen Sie die Vorteile von Leasing und erklären Sie die Grundlaufzeit`,
-        answer: `Vorteile von Leasing:
-- geringe Anfangsinvestition
-- Liquidität bleibt erhalten
-- planbare Raten
-- oft steuerlich interessant
-- Technik bleibt aktueller
+            /* ======================== QUALITÄT ======================== */
+            { id:108, category:"bwl", question:"Was verstehen Sie unter einem einseitigen Handelskauf?", options:[{text:"Nur eine der beiden Vertragsparteien ist Kaufmann",correct:true},{text:"Es wird nur eine Ware gehandelt",correct:false},{text:"Nur der Käufer hat Rechte",correct:false},{text:"Der Kaufvertrag ist einseitig",correct:false}], explanation:"Beim einseitigen Handelskauf gilt nur eingeschränkt das HGB."},
+            { id:109, category:"bwl", question:"Was verstehen Sie unter einem zweiseitigen Handelskauf?", options:[{text:"Beide Vertragsparteien sind Kaufleute",correct:true},{text:"Zwei Waren werden gehandelt",correct:false},{text:"Zwei Verträge werden geschlossen",correct:false},{text:"Es gibt zwei Preise",correct:false}], explanation:"Beim zweiseitigen Handelskauf gilt § 377 HGB."},
+            { id:110, category:"bwl", question:"Was versteht man unter einem Sachmangel?", options:[{text:"Die Ware entspricht nicht der vereinbarten oder üblichen Beschaffenheit",correct:true},{text:"Die Ware ist zu teuer als vereinbart",correct:false},{text:"Der Verkäufer liefert zu spät",correct:false},{text:"Der Käufer bezahlt nicht",correct:false}], explanation:"Sachmangel nach § 434 BGB."}
+        ];
 
-Grundlaufzeit:
-- meist bis etwa 90 % der wirtschaftlichen Nutzungsdauer`,
-        category: `Finanzen`
-      },
-      {
-        question: `Was ist der grundlegende Unterschied zwischen Miete und Leasing?`,
-        answer: `Miete = reine Gebrauchsüberlassung, meist kurzfristiger.
-Leasing = auf längere Nutzung und Finanzierung ausgelegt, mit festen Raten und oft größerer Verantwortung des Leasingnehmers.`,
-        category: `Finanzen`
-      },
-      {
-        question: `In welche 2 Bereichen kann man einen Softwarekatalog aufteilen? Nennen Sie außerdem 4 Softwarearten für Büroorganisation und typische ERP-Module.`,
-        answer: `2 Bereiche:
-- Systemsoftware
-- Anwendungssoftware
+        let currentIndex = 0;
+        let score = 0;
+        let selectedAnswers = new Array(quizData.length).fill(null);
+        let filteredData = [...quizData];
 
-Bürosoftware:
-- Textverarbeitung
-- Tabellenkalkulation
-- Präsentation
-- Datenbank
+        const qContainer = document.getElementById("questionContainer");
+        const currentEl = document.getElementById("current");
+        const totalEl = document.getElementById("total");
+        const scoreEl = document.getElementById("score");
+        const totalBadge = document.getElementById("totalBadge");
+        const categoryFilter = document.getElementById("categoryFilter");
 
-ERP-Module:
-- Einkauf
-- Verkauf
-- Lager
-- Produktion
-- Finanzbuchhaltung
-- Controlling
-- Personal`,
-        category: `Software`
-      },
-      {
-        question: `Was bedeutet MRP, SCM, HRM und FRM?`,
-        answer: `- MRP = Material Requirements Planning
-- SCM = Supply Chain Management
-- HRM = Human Resource Management
-- FRM = Financial Resource Management`,
-        category: `Software`
-      },
-      {
-        question: `Was verstehen Sie unter Industrie 4.0? Warum sind Insellösungen nicht mehr zeitgemäß?`,
-        answer: `Industrie 4.0 = vernetzte, digital gesteuerte Produktion mit Maschinen, Sensoren, Daten und Automatisierung.
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
-Insellösungen sind nicht mehr zeitgemäß, weil sie Datensilos, Medienbrüche und Doppelpflege verursachen.`,
-        category: `Industrie 4.0`
-      },
-      {
-        question: `Wofür dient ein Sensor und wofür dient ein Aktor?`,
-        answer: `Sensor = erfasst physikalische Größen und wandelt sie in Signale um.
-Aktor = setzt Signale in eine physische Aktion um, z. B. Motor, Ventil oder Schalter.`,
-        category: `Industrie 4.0`
-      },
-      {
-        question: `Was verstehen Sie unter SCM, DMS und MES?`,
-        answer: `SCM = Supply Chain Management
-DMS = Dokumentenmanagementsystem
-MES = Manufacturing Execution System`,
-        category: `Software`
-      },
-      {
-        question: `Was verstehen Sie unter SaaS, RFID, PaaS, private Cloud, Hybrid Cloud und Cloud-Client?`,
-        answer: `SaaS = Software as a Service
-RFID = Radio Frequency Identification
-PaaS = Platform as a Service
-Private Cloud = nur für eine Organisation
-Hybrid Cloud = Kombination aus privater und öffentlicher Cloud
-Cloud-Client = Endgerät oder Programm, das Cloud-Dienste nutzt`,
-        category: `Cloud`
-      },
-      {
-        question: `Nennen Sie 4 Anforderungen bei der Vertragsgestaltung mit Providern sowie die Begriffe IT-Outsourcing und On-Site-Management`,
-        answer: `Wichtige Anforderungen:
-- klare Leistungsbeschreibung und SLA
-- Datenschutz und Auftragsverarbeitung
-- Sicherheits-, Backup- und Wiederanlaufkonzept
-- Exit-Strategie / Datenrückgabe
+        function filterQuestions() {
+            const cat = categoryFilter.value;
+            filteredData = cat === "all" ? [...quizData] : quizData.filter(q => q.category === cat);
 
-IT-Outsourcing = Auslagerung von IT-Aufgaben an externe Dienstleister.
-On-Site-Management = Betreuung vor Ort beim Kunden.`,
-        category: `Cloud`
-      },
-      {
-        question: `Was verstehen Sie unter Handelsspanne?`,
-        answer: `Die Handelsspanne ist die Differenz zwischen Einkaufs- und Verkaufspreis bzw. der Aufschlag, mit dem Kosten und Gewinn gedeckt werden.`,
-        category: `Wirtschaft`
-      },
-      {
-        question: `Berechnen Sie die Stromstärke einer Festplatte. Wie hoch ist der Energiebedarf und die Amortisationszeit?`,
-        answer: `Stromstärke:
-I = P / U = 24 W / 12 V = 2 A
+            shuffleArray(filteredData);
+            filteredData.forEach(q => shuffleArray(q.options));
 
-Energiebedarf:
-8 Rechner × 0,4 kW × (8 h × 185 Tage) = 4736 kWh
+            currentIndex = 0;
+            score = 0;
+            selectedAnswers = new Array(filteredData.length).fill(null);
+            totalEl.textContent = filteredData.length;
+            totalBadge.textContent = filteredData.length + " Fragen";
+            scoreEl.textContent = score;
+            showQuestion();
+        }
 
-Amortisationszeit:
-Einsparung pro Monat = 6 h × 80 € = 480 €
-5500 € / 480 € = 11,46 Monate`,
-        category: `Berechnung`
-      },
-      {
-        question: `Was verstehen Sie unter Rechtsmangel, Pipelining, BIOS, Cache, RAM, Schadsoftware und Sachmangel?`,
-        answer: `Rechtsmangel = die Ware ist mit Rechten Dritter belastet, z. B. Eigentums-, Pfand- oder Schutzrechten.
-Pipelining = überlappende Verarbeitung mehrerer Befehle in der CPU.
-BIOS = Basic Input/Output System; initialisiert die Hardware und startet das Betriebssystem.
-Schnellster Cache = L1-Cache, direkt im CPU-Kern.
-RAM = Arbeitsspeicher.
-Schadsoftware: Virus, Wurm, Trojaner, Ransomware, Spyware.
-Sachmangel = Ware hat nicht die vereinbarte oder übliche Beschaffenheit oder ist falsch bzw. unvollständig geliefert.`,
-        category: `Recht / IT`
-      },
-      {
-        question: `Was bedeutet Dienstleistungsvertrag, Werkvertrag und was gilt für die Abnahme?`,
-        answer: `Dienstleistungsvertrag = es wird eine Tätigkeit geschuldet, aber kein konkreter Erfolg.
-Werkvertrag = es wird ein bestimmter Erfolg geschuldet.
+        function showQuestion() {
+            if (filteredData.length === 0) {
+                qContainer.innerHTML = '<p style="text-align:center;padding:40px;">Keine Fragen in dieser Kategorie.</p>';
+                return;
+            }
+            const q = filteredData[currentIndex];
+            currentEl.textContent = currentIndex + 1;
 
-Abnahme beim Werkvertrag:
-- Werk prüfen
-- als vertragsgemäß annehmen
-- danach wird die Vergütung fällig
-- die Gewährleistungsfrist beginnt`,
-        category: `Recht`
-      }
-    ];
+            let html = `<div class="question-number">Frage ${currentIndex + 1} / ${filteredData.length}<span class="category-tag">${q.category}</span></div>`;
+            html += `<div class="question-text">${q.question}</div><div class="answers-container">`;
 
-    const quiz = document.getElementById("quiz");
-    const search = document.getElementById("search");
-    const count = document.getElementById("count");
+            const letters = ["A","B","C","D"];
+            q.options.forEach((opt, i) => {
+                let cls = "answer-option";
+                if (selectedAnswers[currentIndex] === i) cls += " selected";
+                html += `<div class="${cls}" onclick="selectOption(${i})">
+                    <div class="answer-letter">${letters[i]}</div>
+                    <div>${opt.text}</div>
+                </div>`;
+            });
+            html += `</div><div id="feedback" class="feedback"></div>`;
+            qContainer.innerHTML = html;
+            updateFeedback();
+            updateNavButtons();
+        }
 
-    let currentData = shuffleArray([...quizData]);
+        window.selectOption = function(index) {
+            selectedAnswers[currentIndex] = index;
+            const q = filteredData[currentIndex];
+            if (q.options[index].correct) score++;
+            scoreEl.textContent = score;
+            showQuestion();
+        };
 
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
+        function updateFeedback() {
+            const fb = document.getElementById("feedback");
+            const selected = selectedAnswers[currentIndex];
+            if (selected === null) return;
+            const q = filteredData[currentIndex];
+            const isCorrect = q.options[selected].correct;
+            fb.style.display = "block";
+            fb.className = isCorrect ? "feedback correct" : "feedback incorrect";
+            fb.innerHTML = isCorrect ? 
+                `<strong>✅ Richtig!</strong><br>${q.explanation}` : 
+                `<strong>❌ Falsch!</strong><br>${q.explanation}`;
+        }
 
-    function render(list) {
-      quiz.innerHTML = "";
-      list.forEach(item => {
-        const details = document.createElement("details");
-        details.className = "card";
-        details.dataset.search = `${item.question} ${item.answer} ${item.category}`.toLowerCase();
+        function updateNavButtons() {
+            document.getElementById("prevBtn").disabled = currentIndex === 0;
+            const nextBtn = document.getElementById("nextBtn");
+            if (currentIndex === filteredData.length - 1) {
+                nextBtn.textContent = "Ergebnis";
+                nextBtn.className = "submit-btn";
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.textContent = "Weiter →";
+                nextBtn.className = "next-btn";
+                nextBtn.onclick = nextQuestion;
+            }
+        }
 
-        const summary = document.createElement("summary");
+        window.nextQuestion = function() {
+            if (currentIndex < filteredData.length - 1) {
+                currentIndex++;
+                showQuestion();
+            }
+        };
 
-        const q = document.createElement("span");
-        q.className = "q";
-        q.textContent = item.question;
+        window.prevQuestion = function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion();
+            }
+        };
 
-        const tag = document.createElement("span");
-        tag.className = "tag";
-        tag.textContent = item.category;
+        function showResults() {
+            const percent = Math.round((score / filteredData.length) * 100);
+            let message = percent >= 90 ? "Ausgezeichnet! 🎉" : 
+                          percent >= 75 ? "Sehr gut! 👍" : 
+                          percent >= 60 ? "Gut gemacht! ✅" : 
+                          percent >= 50 ? "Bestanden. 📚" : "Noch Übungsbedarf. 💪";
 
-        summary.appendChild(q);
-        summary.appendChild(tag);
+            document.querySelector(".navigation-buttons").style.display = "none";
+            qContainer.style.display = "none";
 
-        const answer = document.createElement("div");
-        answer.className = "answer";
-        answer.textContent = item.answer;
+            const resultsContainer = document.getElementById("resultsContainer");
+            resultsContainer.style.display = "block";
+            resultsContainer.innerHTML = `
+                <h2>Quiz abgeschlossen!</h2>
+                <div class="score-circle">
+                    ${percent}%
+                    <div class="result-label">${score} / ${filteredData.length}</div>
+                </div>
+                <div class="result-message">${message}</div>
+                <p>Sie haben <strong>${score}</strong> von <strong>${filteredData.length}</strong> Fragen richtig beantwortet.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width:${percent}%"></div>
+                </div>
+                <button onclick="location.reload()" style="margin-top:30px;padding:14px 32px;font-size:1.05rem;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
+                    Quiz neu starten
+                </button>`;
+        }
 
-        details.appendChild(summary);
-        details.appendChild(answer);
-
-        quiz.appendChild(details);
-      });
-
-      applyFilter();
-    }
-
-    function applyFilter() {
-      const term = search.value.trim().toLowerCase();
-      let visible = 0;
-
-      document.querySelectorAll(".card").forEach(card => {
-        const match = card.dataset.search.includes(term);
-        card.style.display = match ? "" : "none";
-        if (match) visible++;
-      });
-
-      count.textContent = `${visible} / ${quizData.length} Fragen sichtbar`;
-    }
-
-    document.getElementById("shuffleBtn").addEventListener("click", () => {
-      currentData = shuffleArray([...quizData]);
-      render(currentData);
-    });
-
-    document.getElementById("openAllBtn").addEventListener("click", () => {
-      document.querySelectorAll(".card").forEach(card => {
-        if (card.style.display !== "none") card.open = true;
-      });
-    });
-
-    document.getElementById("closeAllBtn").addEventListener("click", () => {
-      document.querySelectorAll(".card").forEach(card => {
-        card.open = false;
-      });
-    });
-
-    search.addEventListener("input", applyFilter);
-
-    render(currentData);
-  </script>
+        categoryFilter.addEventListener("change", filterQuestions);
+        totalEl.textContent = quizData.length;
+        totalBadge.textContent = quizData.length + " Fragen";
+        filterQuestions();
+    </script>
 </body>
 </html>
